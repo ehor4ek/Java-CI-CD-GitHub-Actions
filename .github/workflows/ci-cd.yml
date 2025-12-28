@@ -20,3 +20,6 @@ jobs:
     
       - name: Сборка через Maven
         run: mvn clean compile
+
+      - name: Package application
+        run: mvn package -DskipTests
