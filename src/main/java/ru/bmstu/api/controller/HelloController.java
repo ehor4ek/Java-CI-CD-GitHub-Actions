@@ -12,7 +12,7 @@ public class HelloController {
 
     @GetMapping("/url1")
     public String url1() {
-        return "Привет!!!";
+        return "Привет CI/CD!!!";
     }
 
     @GetMapping("/url2")
