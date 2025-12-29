@@ -22,8 +22,24 @@ jobs:
       - name: Сборка через Maven
         run: mvn clean compile
 
-      - name: Тестирование
-        run: mvn test
-
       - name: Создание JAR-архива
         run: mvn package -DskipTests
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Начало тестирование
+        run: echo "Начинаем тестирование"
+        
+      - name: Копирование репозитория
+        uses: actions/checkout@v4
+    
+      - name: Настройка JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+          cache: maven
+
+      - name: Тестирование
+        run: mvn test
