@@ -5,6 +5,6 @@
 
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
-COPY target/*.jar api.jar
+COPY /opt/java/*.jar java.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "api.jar"]
+ENTRYPOINT ["java", "-jar", "java.jar"]
