@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = {
-        "http://192.168.56.1:3000"
+        "*"
 })
 
 @RequestMapping("/api")
