@@ -63,7 +63,7 @@ jobs:
         with:
           name: java-jar
 
-      - name: Развёртывание на ВМ
+      - name: Доставка до ВМ
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -71,5 +71,5 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           source: "java.jar"
-          target: ${{ DEPLOY_PATH }}
+          target: ${{ secrets.DEPLOY_PATH }}
           
