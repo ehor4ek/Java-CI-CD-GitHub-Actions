@@ -85,5 +85,6 @@ jobs:
             sleep 10
             (sudo nohup java -jar /opt/java/*.jar &) ; sleep 10 ; sudo ps -auxf | grep -i java
             curl localhost:8080/api/url1
+            exit
           
           
