@@ -8,6 +8,7 @@ jobs:
     steps:
       - name: Начало сборки
         run: echo "Начинаем сборку"
+        
       - name: Копирование репозитория
         uses: actions/checkout@v4
     
@@ -21,5 +22,11 @@ jobs:
       - name: Сборка через Maven
         run: mvn clean compile
 
-      - name: Package application
+      - name: Создание JAR-архива
         run: mvn package -DskipTests
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Тесты
+        run: mvn test
