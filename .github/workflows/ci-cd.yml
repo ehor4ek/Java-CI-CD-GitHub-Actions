@@ -63,7 +63,7 @@ jobs:
         with:
           name: java-jar
 
-      - name: Доставка до ВМ
+      - name: Деплой
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -72,4 +72,20 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           source: "*.jar"
           target: ${{ secrets.DEPLOY_PATH }}
+
+      - name: Запуск кода
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          script: |
+            pkill java
+            sleep 10
+            nohup java -jar /opt/java/*.jar &
+            sleep 10
+            ps -auxf | grep -i java
+            curl localhost:8080/api/url1
+          
           
