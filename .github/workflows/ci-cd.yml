@@ -22,12 +22,8 @@ jobs:
       - name: Сборка через Maven
         run: mvn clean compile
 
+      - name: Тестирование
+        run: mvn test
+
       - name: Создание JAR-архива
         run: mvn package -DskipTests
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Тесты
-        run: mvn test
