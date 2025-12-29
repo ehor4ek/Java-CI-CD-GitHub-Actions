@@ -51,6 +51,12 @@ jobs:
           name: java-jar
           path: target/*.jar
 
+      - name: Сохранение Dockerfile в артифакте
+        uses: actions/upload-artifact@v4
+        with:
+          name: Dockerfile
+          path: Dockerfile
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -63,7 +69,12 @@ jobs:
         with:
           name: java-jar
 
-      - name: Деплой
+      - name: Скачивание артифакта с Dockerfile
+        uses: actions/download-artifact@v4
+        with:
+          name: Dockerfile
+
+      - name: Деплой JAR-архива
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -71,6 +82,16 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           source: "*.jar"
+          target: ${{ secrets.DEPLOY_PATH }}
+
+      - name: Деплой Dockerfile
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          source: "Dockerfile"
           target: ${{ secrets.DEPLOY_PATH }}
 
       - name: Запуск кода
@@ -81,10 +102,11 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           script: |
-            sudo pkill java
+            sudo docker stop java-jar
             sleep 10
-            (sudo nohup java -jar /opt/java/*.jar &) ; sleep 10 ; sudo ps -auxf | grep -i java
-            curl localhost:8080/api/url1
-            exit
+            sudo docker rm java-jar
+            cd /opt/java
+            sudo docker build -t java-jar .
+            sudo docker run -d -p 8080:8080 --name java-jar java-jar
           
           
